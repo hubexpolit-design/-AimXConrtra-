@@ -356,6 +356,30 @@
         flex-direction: column;
       }
     }
+
+/* ===== ADVANCED LOGIN HISTORY ===== */
+.history-toolbar{display:grid;grid-template-columns:1.5fr .8fr .9fr auto auto;gap:10px;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.12)}
+.history-input,.history-select{width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;outline:none;color:var(--text);background:rgba(0,0,0,.28)}
+.history-input:focus,.history-select:focus{border-color:rgba(0,255,85,.55);box-shadow:0 0 0 3px rgba(0,255,85,.06)}
+.history-select option{background:#061009;color:white}
+.history-summary{display:flex;flex-wrap:wrap;gap:9px;padding:12px 20px;border-bottom:1px solid rgba(255,255,255,.05)}
+.history-chip{padding:7px 10px;border:1px solid var(--border);border-radius:999px;color:var(--muted);background:rgba(0,0,0,.18);font-size:11px;font-weight:800}
+.history-chip strong{color:var(--text);margin-left:4px}
+.history-row{cursor:pointer;transition:background .15s ease}
+.history-row:hover{background:rgba(0,255,85,.035)}
+.ip-cell{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#bfffcf;white-space:nowrap}
+.browser-cell{min-width:150px}.device-line{display:block;margin-top:3px;color:var(--muted);font-size:10px}
+.details-row{display:none;background:rgba(0,0,0,.18)}.details-row.open{display:table-row}
+.details-box{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:14px 18px}
+.detail-card{padding:11px;border:1px solid rgba(0,255,85,.10);border-radius:10px;background:rgba(0,255,85,.025);overflow:hidden}
+.detail-card small{display:block;color:var(--muted);margin-bottom:5px;font-size:10px;text-transform:uppercase;letter-spacing:.7px}
+.detail-card code{color:#e8fff0;font-size:11px;word-break:break-all}
+.pagination{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;border-top:1px solid rgba(255,255,255,.05)}
+.page-actions{display:flex;gap:8px}.page-btn{padding:8px 12px;border:1px solid var(--border);border-radius:9px;color:var(--lime);background:transparent;cursor:pointer}
+.page-btn:disabled{opacity:.35;cursor:not-allowed}.page-info{color:var(--muted);font-size:11px}
+@media(max-width:900px){.history-toolbar{grid-template-columns:1fr 1fr}.history-toolbar .history-input{grid-column:1/-1}.details-box{grid-template-columns:1fr}}
+@media(max-width:520px){.history-toolbar{grid-template-columns:1fr}.history-toolbar .history-input{grid-column:auto}.pagination{align-items:flex-start;flex-direction:column}}
+
   </style>
 </head>
 
@@ -483,39 +507,72 @@
 
     </section>
 
-    <!-- LOGIN HISTORY -->
+    <!-- ADVANCED LOGIN HISTORY -->
 
     <section class="section" id="history">
-
       <div class="panel">
-
         <div class="panel-head">
-          <h2>Login History</h2>
+          <div>
+            <h2>Login History</h2>
+            <div class="muted">Security activity, IPs, devices and authentication events</div>
+          </div>
           <button class="refresh" onclick="loadHistory()">Refresh</button>
         </div>
 
+        <div class="history-toolbar">
+          <input id="historySearch" class="history-input" type="search"
+            placeholder="Search email, IP, browser, user-agent..." autocomplete="off">
+
+          <select id="historyStatus" class="history-select">
+            <option value="ALL">All events</option>
+            <option value="SUCCESS">Successful login</option>
+            <option value="FAILED">Failed login</option>
+            <option value="REGISTER">Registration</option>
+            <option value="LOGOUT">Logout</option>
+          </select>
+
+          <select id="historyPageSize" class="history-select">
+            <option value="10">10 / page</option>
+            <option value="25" selected>25 / page</option>
+            <option value="50">50 / page</option>
+            <option value="100">100 / page</option>
+          </select>
+
+          <button class="refresh" onclick="clearHistoryFilters()">Clear</button>
+          <button class="refresh" onclick="exportHistoryCSV()">Export CSV</button>
+        </div>
+
+        <div class="history-summary">
+          <div class="history-chip">Shown <strong id="historyShown">0</strong></div>
+          <div class="history-chip">Success <strong id="historySuccess">0</strong></div>
+          <div class="history-chip">Failed <strong id="historyFailed">0</strong></div>
+          <div class="history-chip">Register <strong id="historyRegister">0</strong></div>
+          <div class="history-chip">Logout <strong id="historyLogout">0</strong></div>
+        </div>
+
         <div class="table-wrap">
-
           <table>
-
             <thead>
               <tr>
                 <th>Email</th>
                 <th>Status</th>
                 <th>IP</th>
                 <th>Time</th>
-                <th>Browser</th>
+                <th>Browser / Device</th>
               </tr>
             </thead>
-
             <tbody id="historyTable"></tbody>
-
           </table>
-
         </div>
 
+        <div class="pagination">
+          <div class="page-info" id="historyPageInfo">Page 1</div>
+          <div class="page-actions">
+            <button class="page-btn" id="historyPrev" onclick="changeHistoryPage(-1)">← Previous</button>
+            <button class="page-btn" id="historyNext" onclick="changeHistoryPage(1)">Next →</button>
+          </div>
+        </div>
       </div>
-
     </section>
 
     <!-- ACTIVE SESSIONS -->
@@ -683,84 +740,239 @@
   }
 
   // =====================================================
-  // LOGIN HISTORY
+  // ADVANCED LOGIN HISTORY
   // =====================================================
 
+  let allHistory = [];
+  let filteredHistory = [];
+  let historyPage = 1;
+
+  function statusClass(status) {
+    if (status === "SUCCESS") return "success";
+    if (status === "REGISTER") return "register";
+    if (status === "LOGOUT") return "online";
+    return "failed";
+  }
+
+  function getDeviceInfo(userAgent) {
+    const ua = String(userAgent || "");
+    let browser = "Other";
+    if (ua.includes("Edg")) browser = "Microsoft Edge";
+    else if (ua.includes("Chrome")) browser = "Chrome";
+    else if (ua.includes("Firefox")) browser = "Firefox";
+    else if (ua.includes("Safari")) browser = "Safari";
+
+    let os = "Unknown OS";
+    if (ua.includes("Windows")) os = "Windows";
+    else if (ua.includes("Android")) os = "Android";
+    else if (ua.includes("iPhone") || ua.includes("iPad")) os = "iOS";
+    else if (ua.includes("Mac OS")) os = "macOS";
+    else if (ua.includes("Linux")) os = "Linux";
+
+    return { browser, os };
+  }
+
   async function loadHistory() {
+    try {
+      const response = await fetch("/api/admin/login-history?limit=500", {
+        credentials: "same-origin",
+        cache: "no-store"
+      });
 
-    const response = await fetch(
-      "/api/admin/login-history?limit=100",
-      {
-        credentials: "same-origin"
-      }
-    );
+      if (!response.ok) return;
 
-    if (!response.ok) return;
+      const data = await response.json();
+      allHistory = Array.isArray(data.history) ? data.history : [];
+      historyPage = 1;
+      applyHistoryFilters();
+    } catch (error) {
+      console.error("History load error:", error);
+    }
+  }
 
-    const data = await response.json();
+  function applyHistoryFilters() {
+    const search = String(document.getElementById("historySearch").value || "")
+      .trim().toLowerCase();
+    const status = document.getElementById("historyStatus").value;
 
+    filteredHistory = allHistory.filter(item => {
+      const matchesStatus = status === "ALL" ||
+        String(item.status || "").toUpperCase() === status;
+
+      const haystack = [
+        item.email, item.ip_address, item.user_agent,
+        item.status, item.user_id, item.created_at
+      ].map(v => String(v ?? "").toLowerCase()).join(" ");
+
+      return matchesStatus && (!search || haystack.includes(search));
+    });
+
+    updateHistorySummary();
+    renderHistory();
+  }
+
+  function updateHistorySummary() {
+    const counts = {SUCCESS:0, FAILED:0, REGISTER:0, LOGOUT:0};
+
+    filteredHistory.forEach(item => {
+      const s = String(item.status || "").toUpperCase();
+      if (counts[s] !== undefined) counts[s]++;
+    });
+
+    document.getElementById("historyShown").textContent = filteredHistory.length;
+    document.getElementById("historySuccess").textContent = counts.SUCCESS;
+    document.getElementById("historyFailed").textContent = counts.FAILED;
+    document.getElementById("historyRegister").textContent = counts.REGISTER;
+    document.getElementById("historyLogout").textContent = counts.LOGOUT;
+  }
+
+  function renderHistory() {
     const table = document.getElementById("historyTable");
+    const pageSize = Number(document.getElementById("historyPageSize").value || 25);
+    const totalPages = Math.max(1, Math.ceil(filteredHistory.length / pageSize));
 
-    if (!data.history.length) {
+    if (historyPage > totalPages) historyPage = totalPages;
 
+    const start = (historyPage - 1) * pageSize;
+    const pageItems = filteredHistory.slice(start, start + pageSize);
+
+    if (!pageItems.length) {
       table.innerHTML = `
-        <tr>
-          <td colspan="5" class="empty">
-            No login history yet.
-          </td>
-        </tr>
+        <tr><td colspan="5" class="empty">No matching login activity.</td></tr>
       `;
+    } else {
+      table.innerHTML = pageItems.map((item, index) => {
+        const rowId = `history-details-${start + index}`;
+        const device = getDeviceInfo(item.user_agent);
+        const ip = item.ip_address || "Unknown";
+        const ua = item.user_agent || "Unknown";
 
+        return `
+          <tr class="history-row"
+              onclick="toggleHistoryDetails('${rowId}')"
+              title="Click to view full event details">
+            <td>
+              <strong>${escapeHtml(item.email || "Unknown")}</strong>
+              <span class="device-line">User ID: ${escapeHtml(item.user_id ?? "—")}</span>
+            </td>
+            <td>
+              <span class="status ${statusClass(item.status)}">
+                ${escapeHtml(item.status || "UNKNOWN")}
+              </span>
+            </td>
+            <td class="ip-cell">${escapeHtml(ip)}</td>
+            <td>${formatDate(item.created_at)}</td>
+            <td class="browser-cell">
+              <strong>${escapeHtml(device.browser)}</strong>
+              <span class="device-line">${escapeHtml(device.os)}</span>
+            </td>
+          </tr>
+
+          <tr class="details-row" id="${rowId}">
+            <td colspan="5">
+              <div class="details-box">
+                <div class="detail-card">
+                  <small>Email</small>
+                  <code>${escapeHtml(item.email || "Unknown")}</code>
+                </div>
+                <div class="detail-card">
+                  <small>IP Address</small>
+                  <code>${escapeHtml(ip)}</code>
+                </div>
+                <div class="detail-card">
+                  <small>Event</small>
+                  <code>${escapeHtml(item.status || "UNKNOWN")}</code>
+                </div>
+                <div class="detail-card">
+                  <small>User ID</small>
+                  <code>${escapeHtml(item.user_id ?? "—")}</code>
+                </div>
+                <div class="detail-card">
+                  <small>Timestamp</small>
+                  <code>${escapeHtml(String(item.created_at || "—"))}</code>
+                </div>
+                <div class="detail-card">
+                  <small>User-Agent</small>
+                  <code>${escapeHtml(ua)}</code>
+                </div>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    document.getElementById("historyPageInfo").textContent =
+      `Page ${historyPage} of ${totalPages} • ${filteredHistory.length} events`;
+
+    document.getElementById("historyPrev").disabled = historyPage <= 1;
+    document.getElementById("historyNext").disabled = historyPage >= totalPages;
+  }
+
+  function toggleHistoryDetails(id) {
+    const row = document.getElementById(id);
+    if (row) row.classList.toggle("open");
+  }
+
+  function changeHistoryPage(direction) {
+    const pageSize = Number(document.getElementById("historyPageSize").value || 25);
+    const totalPages = Math.max(1, Math.ceil(filteredHistory.length / pageSize));
+
+    historyPage = Math.min(Math.max(historyPage + direction, 1), totalPages);
+    renderHistory();
+  }
+
+  function clearHistoryFilters() {
+    document.getElementById("historySearch").value = "";
+    document.getElementById("historyStatus").value = "ALL";
+    document.getElementById("historyPageSize").value = "25";
+    historyPage = 1;
+    applyHistoryFilters();
+  }
+
+  function exportHistoryCSV() {
+    if (!filteredHistory.length) {
+      alert("No login history to export.");
       return;
     }
 
-    table.innerHTML = data.history.map(item => {
+    const headers = ["ID","User ID","Email","Status","IP Address","Created At","User Agent"];
+    const rows = filteredHistory.map(item => [
+      item.id, item.user_id, item.email, item.status,
+      item.ip_address, item.created_at, item.user_agent
+    ]);
 
-      let statusClass = "failed";
+    const csv = [headers, ...rows].map(row =>
+      row.map(value => `"${String(value ?? "").replaceAll('"', '""')}"`).join(",")
+    ).join("\r\n");
 
-      if (item.status === "SUCCESS") {
-        statusClass = "success";
-      }
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
 
-      if (item.status === "REGISTER") {
-        statusClass = "register";
-      }
-
-      return `
-
-        <tr>
-
-          <td>
-            ${escapeHtml(item.email)}
-          </td>
-
-          <td>
-            <span class="status ${statusClass}">
-              ${escapeHtml(item.status)}
-            </span>
-          </td>
-
-          <td>
-            ${escapeHtml(item.ip_address || "unknown")}
-          </td>
-
-          <td>
-            ${formatDate(item.created_at)}
-          </td>
-
-          <td>
-            <span class="muted">
-              ${escapeHtml(shortBrowser(item.user_agent))}
-            </span>
-          </td>
-
-        </tr>
-
-      `;
-
-    }).join("");
-
+    link.href = url;
+    link.download = `aimxcontrra-login-history-${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
   }
+
+  document.getElementById("historySearch").addEventListener("input", () => {
+    historyPage = 1;
+    applyHistoryFilters();
+  });
+
+  document.getElementById("historyStatus").addEventListener("change", () => {
+    historyPage = 1;
+    applyHistoryFilters();
+  });
+
+  document.getElementById("historyPageSize").addEventListener("change", () => {
+    historyPage = 1;
+    renderHistory();
+  });
+
 
   // =====================================================
   // ACTIVE SESSIONS
