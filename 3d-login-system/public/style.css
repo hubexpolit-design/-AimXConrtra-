@@ -1,422 +1,1459 @@
+/* =========================================
+   AIMXCONTRRA 3D LOGIN SYSTEM
+   NEON GREEN • YELLOW • BLACK • BLUE
+   ========================================= */
+
+
+/* =========================================
+   RESET
+   ========================================= */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+
+/* =========================================
+   VARIABLES
+   ========================================= */
+
 :root {
-  --bg: #020617;
-  --card: rgba(8, 15, 35, .72);
-  --border: rgba(255,255,255,.13);
-  --text: #f8fafc;
-  --muted: #94a3b8;
-  --cyan: #22d3ee;
-  --purple: #8b5cf6;
+
+  --bg: #020603;
+
+  --bg-dark: #000000;
+
+  --card: rgba(3, 13, 7, 0.78);
+
+  --card-dark: rgba(1, 7, 4, 0.92);
+
+  --border: rgba(157, 255, 0, 0.20);
+
+  --border-bright: rgba(157, 255, 0, 0.55);
+
+  --text: #f5fff6;
+
+  --muted: #91a69a;
+
+  --green: #00ff55;
+
+  --green-light: #b7ff00;
+
+  --yellow: #ffe600;
+
+  --blue: #00aaff;
+
+  --danger: #ff5252;
+
 }
+
+
+/* =========================================
+   BODY
+   ========================================= */
 
 body {
+
   min-height: 100vh;
+
   overflow: hidden;
+
   color: var(--text);
+
   background:
-    radial-gradient(circle at 50% 45%, #172554 0, #020617 45%, #000 100%);
-  font-family: Inter, Segoe UI, system-ui, sans-serif;
+
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(0, 100, 35, 0.35) 0,
+      rgba(2, 20, 9, 0.9) 35%,
+      #000 80%
+    );
+
+  font-family:
+    Inter,
+    Segoe UI,
+    system-ui,
+    -apple-system,
+    sans-serif;
+
 }
 
-button, input {
-  font: inherit;
-}
+
+/* =========================================
+   SCENE
+   ========================================= */
 
 .scene {
+
   position: fixed;
+
   inset: 0;
+
   overflow: hidden;
+
   pointer-events: none;
+
+  z-index: 0;
+
 }
+
+
+/* =========================================
+   GLOWING ORBS
+   ========================================= */
 
 .orb {
+
   position: absolute;
+
   border-radius: 50%;
-  filter: blur(75px);
-  opacity: .35;
-  animation: float 9s ease-in-out infinite alternate;
+
+  filter: blur(90px);
+
+  opacity: 0.30;
+
+  animation:
+    float 10s ease-in-out infinite alternate;
+
 }
+
+
+/* GREEN ORB */
 
 .orb-one {
-  width: 360px;
-  height: 360px;
-  background: #7c3aed;
-  top: -130px;
-  left: -100px;
+
+  width: 400px;
+
+  height: 400px;
+
+  background: #00ff55;
+
+  top: -170px;
+
+  left: -130px;
+
 }
+
+
+/* YELLOW ORB */
 
 .orb-two {
-  width: 340px;
-  height: 340px;
-  background: #06b6d4;
-  right: -120px;
-  bottom: -130px;
+
+  width: 360px;
+
+  height: 360px;
+
+  background: #ffe600;
+
+  right: -150px;
+
+  bottom: -150px;
+
   animation-delay: -3s;
+
 }
+
+
+/* BLUE ORB */
+
+.orb-three {
+
+  width: 300px;
+
+  height: 300px;
+
+  background: #0077ff;
+
+  right: 25%;
+
+  top: 15%;
+
+  opacity: 0.15;
+
+  animation-delay: -6s;
+
+}
+
+
+/* =========================================
+   ORB ANIMATION
+   ========================================= */
 
 @keyframes float {
-  to { transform: translate(100px, 70px) scale(1.2); }
+
+  0% {
+
+    transform:
+      translate(0, 0)
+      scale(1);
+
+  }
+
+  50% {
+
+    transform:
+      translate(70px, 50px)
+      scale(1.15);
+
+  }
+
+  100% {
+
+    transform:
+      translate(120px, 80px)
+      scale(1.25);
+
+  }
+
 }
+
+
+/* =========================================
+   3D GRID FLOOR
+   ========================================= */
 
 .grid {
+
   position: absolute;
+
   width: 220%;
-  height: 75%;
+
+  height: 80%;
+
   left: -60%;
-  bottom: -30%;
-  transform: perspective(550px) rotateX(65deg);
+
+  bottom: -32%;
+
+  transform:
+    perspective(550px)
+    rotateX(65deg);
+
   background-image:
-    linear-gradient(rgba(34,211,238,.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(34,211,238,.12) 1px, transparent 1px);
+
+    linear-gradient(
+      rgba(0, 255, 85, 0.13) 1px,
+      transparent 1px
+    ),
+
+    linear-gradient(
+      90deg,
+      rgba(255, 230, 0, 0.10) 1px,
+      transparent 1px
+    );
+
   background-size: 55px 55px;
-  animation: gridMove 5s linear infinite;
+
+  animation:
+    gridMove 5s linear infinite;
+
+  opacity: 0.65;
+
 }
+
+
+/* GRID ANIMATION */
 
 @keyframes gridMove {
-  to { background-position: 0 55px, 55px 0; }
+
+  to {
+
+    background-position:
+      0 55px,
+      55px 0;
+
+  }
+
 }
+
+
+/* =========================================
+   ENERGY RINGS
+   ========================================= */
+
+.energy-ring {
+
+  position: absolute;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(0, 255, 85, 0.15);
+
+  box-shadow:
+    0 0 30px rgba(0, 255, 85, 0.08),
+    inset 0 0 30px rgba(255, 230, 0, 0.05);
+
+  animation:
+    ringRotate 20s linear infinite;
+
+}
+
+
+/* RING ONE */
+
+.energy-ring-one {
+
+  width: 600px;
+
+  height: 600px;
+
+  left: 50%;
+
+  top: 50%;
+
+  transform:
+    translate(-50%, -50%)
+    rotateX(65deg);
+
+}
+
+
+/* RING TWO */
+
+.energy-ring-two {
+
+  width: 850px;
+
+  height: 850px;
+
+  left: 50%;
+
+  top: 50%;
+
+  transform:
+    translate(-50%, -50%)
+    rotateY(65deg);
+
+  border-color:
+    rgba(255, 230, 0, 0.08);
+
+  animation-direction: reverse;
+
+}
+
+
+/* RING ANIMATION */
+
+@keyframes ringRotate {
+
+  from {
+
+    rotate: 0deg;
+
+  }
+
+  to {
+
+    rotate: 360deg;
+
+  }
+
+}
+
+
+/* =========================================
+   PARTICLES
+   ========================================= */
 
 .particles span {
+
   position: absolute;
+
   width: 3px;
+
   height: 3px;
+
   border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 14px var(--cyan);
-  animation: rise 5s linear infinite;
+
+  background: var(--green);
+
+  box-shadow:
+
+    0 0 8px var(--green),
+
+    0 0 18px rgba(0, 255, 85, 0.6);
+
+  animation:
+    rise 5s linear infinite;
+
 }
+
+
+/* PARTICLE ANIMATION */
 
 @keyframes rise {
-  from { transform: translateY(0); opacity: 0; }
-  20% { opacity: 1; }
-  to { transform: translateY(-500px); opacity: 0; }
+
+  from {
+
+    transform:
+      translateY(0);
+
+    opacity: 0;
+
+  }
+
+  20% {
+
+    opacity: 1;
+
+  }
+
+  to {
+
+    transform:
+      translateY(-500px);
+
+    opacity: 0;
+
+  }
+
 }
+
+
+/* =========================================
+   AUTH SHELL
+   ========================================= */
 
 .auth-shell {
+
   min-height: 100vh;
+
   display: grid;
+
   place-items: center;
+
   padding: 20px;
+
   perspective: 1200px;
+
+  position: relative;
+
+  z-index: 2;
+
 }
+
+
+/* =========================================
+   CARD WRAPPER
+   ========================================= */
 
 .card-wrap {
+
   width: min(440px, 100%);
+
   transform-style: preserve-3d;
-  transition: transform .12s ease-out;
+
+  transition:
+    transform 0.12s ease-out;
+
 }
+
+
+/* =========================================
+   LOGIN CARD
+   ========================================= */
 
 .card {
+
   position: relative;
+
   padding: 42px;
-  border: 1px solid var(--border);
+
+  border:
+
+    1px solid
+    var(--border-bright);
+
   border-radius: 30px;
-  background: var(--card);
+
+  background:
+
+    linear-gradient(
+      145deg,
+      rgba(5, 25, 12, 0.92),
+      rgba(0, 8, 4, 0.88)
+    );
+
   backdrop-filter: blur(24px);
+
   -webkit-backdrop-filter: blur(24px);
+
   box-shadow:
-    0 50px 100px rgba(0,0,0,.55),
-    inset 0 1px 0 rgba(255,255,255,.12);
+
+    0 50px 100px
+    rgba(0, 0, 0, 0.70),
+
+    0 0 50px
+    rgba(0, 255, 85, 0.08),
+
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.10);
+
   transform-style: preserve-3d;
+
 }
+
+
+/* =========================================
+   ANIMATED CARD BORDER
+   ========================================= */
 
 .card::before {
+
   content: "";
+
   position: absolute;
+
   inset: -1px;
+
   z-index: -1;
+
   border-radius: 31px;
-  background: linear-gradient(120deg, transparent, #8b5cf6, transparent, #22d3ee, transparent);
-  background-size: 300% 300%;
-  opacity: .5;
-  animation: border 5s linear infinite;
+
+  background:
+
+    linear-gradient(
+      120deg,
+
+      transparent,
+
+      #00ff55,
+
+      transparent,
+
+      #ffe600,
+
+      transparent,
+
+      #00aaff,
+
+      transparent
+    );
+
+  background-size: 400% 400%;
+
+  opacity: 0.55;
+
+  animation:
+    borderMove 6s linear infinite;
+
 }
 
-@keyframes border {
-  to { background-position: 300% 0; }
+
+/* BORDER ANIMATION */
+
+@keyframes borderMove {
+
+  0% {
+
+    background-position:
+      0% 50%;
+
+  }
+
+  50% {
+
+    background-position:
+      100% 50%;
+
+  }
+
+  100% {
+
+    background-position:
+      0% 50%;
+
+  }
+
 }
+
+
+/* =========================================
+   LOGO
+   ========================================= */
 
 .logo {
-  width: 76px;
-  height: 76px;
+
+  width: 92px;
+
+  height: 92px;
+
   margin: auto;
+
+  padding: 3px;
+
   display: grid;
+
   place-items: center;
-  border-radius: 23px;
-  font-size: 32px;
-  background: linear-gradient(135deg, #7c3aed, #06b6d4);
-  box-shadow: 0 20px 45px rgba(124,58,237,.35);
-  transform: translateZ(55px);
-  animation: logo 5s linear infinite;
+
+  border-radius: 50%;
+
+  background:
+
+    linear-gradient(
+      135deg,
+
+      #00ff55,
+
+      #ffe600,
+
+      #00aaff,
+
+      #00ff55
+    );
+
+  box-shadow:
+
+    0 0 15px
+    rgba(0, 255, 85, 0.75),
+
+    0 0 35px
+    rgba(0, 255, 85, 0.40),
+
+    0 0 70px
+    rgba(255, 230, 0, 0.18);
+
+  transform:
+    translateZ(55px);
+
+  animation:
+    logo 7s linear infinite;
+
 }
+
+
+/* LOGO IMAGE */
+
+.logo img {
+
+  width: 100%;
+
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  border-radius: 50%;
+
+  border: 3px solid #020603;
+
+}
+
+
+/* LOGO ROTATION */
 
 @keyframes logo {
-  50% { transform: translateZ(55px) rotateY(180deg); }
-  100% { transform: translateZ(55px) rotateY(360deg); }
+
+  0% {
+
+    transform:
+      translateZ(55px)
+      rotateY(0deg);
+
+  }
+
+  50% {
+
+    transform:
+      translateZ(55px)
+      rotateY(180deg);
+
+  }
+
+  100% {
+
+    transform:
+      translateZ(55px)
+      rotateY(360deg);
+
+  }
+
 }
+
+
+/* =========================================
+   HEADING
+   ========================================= */
 
 .heading {
+
   text-align: center;
-  margin: 24px 0 28px;
-  transform: translateZ(40px);
+
+  margin:
+    24px 0 28px;
+
+  transform:
+    translateZ(40px);
+
 }
+
+
+/* EYEBROW */
 
 .eyebrow {
-  color: var(--cyan);
+
+  color: var(--green-light);
+
   font-size: 10px;
-  font-weight: 800;
+
+  font-weight: 900;
+
   letter-spacing: 3px;
+
   margin-bottom: 8px;
+
+  text-shadow:
+    0 0 10px
+    rgba(183, 255, 0, 0.45);
+
 }
+
+
+/* TITLE */
 
 .heading h1 {
+
   font-size: 30px;
+
   letter-spacing: -1px;
+
+  color: #ffffff;
+
+  text-shadow:
+
+    0 0 12px
+    rgba(0, 255, 85, 0.30);
+
 }
+
+
+/* SUBTITLE */
 
 .heading p {
+
   margin-top: 8px;
+
   color: var(--muted);
+
   font-size: 13px;
+
 }
+
+
+/* =========================================
+   FORM FIELDS
+   ========================================= */
 
 .field {
+
   position: relative;
+
   margin-bottom: 20px;
-  transform: translateZ(30px);
+
+  transform:
+    translateZ(30px);
+
 }
+
+
+/* INPUT */
 
 .field input {
+
   width: 100%;
+
   height: 58px;
-  padding: 0 50px 0 18px;
-  border: 1px solid var(--border);
+
+  padding:
+    0 50px
+    0 18px;
+
+  border:
+
+    1px solid
+    var(--border);
+
   border-radius: 15px;
+
   outline: none;
+
   color: white;
-  background: rgba(0,0,0,.25);
-  transition: .25s;
+
+  background:
+
+    rgba(0, 12, 5, 0.75);
+
+  transition:
+    0.25s;
+
 }
+
+
+/* INPUT FOCUS */
 
 .field input:focus {
-  border-color: var(--cyan);
-  box-shadow: 0 0 25px rgba(34,211,238,.12);
+
+  border-color:
+    var(--green);
+
+  box-shadow:
+
+    0 0 20px
+    rgba(0, 255, 85, 0.15),
+
+    inset 0 0 15px
+    rgba(0, 255, 85, 0.04);
+
 }
 
+
+/* FLOATING LABEL */
+
 .field label {
+
   position: absolute;
+
   left: 18px;
+
   top: 19px;
-  color: #64748b;
+
+  color: #607266;
+
   pointer-events: none;
-  transition: .2s;
+
+  transition:
+    0.2s;
+
 }
+
+
+/* LABEL ACTIVE */
 
 .field input:focus + label,
 .field input:not(:placeholder-shown) + label {
+
   top: -9px;
+
   left: 13px;
-  padding: 0 7px;
+
+  padding:
+    0 7px;
+
   border-radius: 5px;
-  background: #0b1328;
-  color: var(--cyan);
+
+  background:
+    #06120a;
+
+  color:
+    var(--green-light);
+
   font-size: 11px;
+
 }
+
+
+/* =========================================
+   PASSWORD EYE
+   ========================================= */
 
 .eye {
+
   position: absolute;
+
   right: 14px;
+
   top: 13px;
+
   width: 34px;
+
   height: 34px;
+
   border: 0;
-  color: #94a3b8;
-  background: transparent;
+
+  color:
+    #94a89a;
+
+  background:
+    transparent;
+
   cursor: pointer;
+
 }
+
+
+/* =========================================
+   OPTIONS
+   ========================================= */
 
 .options {
+
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
-  margin: 2px 0 22px;
-  color: var(--muted);
+
+  margin:
+    2px 0 22px;
+
+  color:
+    var(--muted);
+
   font-size: 12px;
-  transform: translateZ(25px);
+
+  transform:
+    translateZ(25px);
+
 }
+
+
+/* OPTION LABEL */
 
 .options label {
+
   display: flex;
+
   gap: 7px;
+
   align-items: center;
+
 }
 
+
+/* CHECKBOX */
+
 .options input {
-  accent-color: var(--purple);
+
+  accent-color:
+    var(--green);
+
 }
+
+
+/* LINKS */
 
 .options a,
 .switch button {
-  color: var(--cyan);
-  text-decoration: none;
+
+  color:
+    var(--green-light);
+
+  text-decoration:
+    none;
+
 }
+
+
+/* =========================================
+   PRIMARY BUTTON
+   ========================================= */
 
 .primary {
+
   width: 100%;
+
   height: 58px;
+
   border: 0;
+
   border-radius: 15px;
-  color: white;
-  font-weight: 800;
+
+  color:
+    #020603;
+
+  font-weight: 900;
+
   cursor: pointer;
-  background: linear-gradient(135deg, #7c3aed, #06b6d4);
-  box-shadow: 0 15px 30px rgba(124,58,237,.3), 0 5px 0 #312e81;
-  transform: translateZ(40px);
-  transition: .2s;
+
+  background:
+
+    linear-gradient(
+      135deg,
+
+      #00ff55,
+
+      #b7ff00,
+
+      #ffe600
+    );
+
+  box-shadow:
+
+    0 15px 30px
+    rgba(0, 255, 85, 0.22),
+
+    0 5px 0
+    #4b5700;
+
+  transform:
+    translateZ(40px);
+
+  transition:
+    0.2s;
+
 }
+
+
+/* BUTTON HOVER */
 
 .primary:hover {
-  transform: translateZ(55px) translateY(-3px);
+
+  transform:
+    translateZ(55px)
+    translateY(-3px);
+
+  box-shadow:
+
+    0 20px 35px
+    rgba(0, 255, 85, 0.35),
+
+    0 0 25px
+    rgba(255, 230, 0, 0.18),
+
+    0 5px 0
+    #4b5700;
+
 }
+
+
+/* BUTTON ACTIVE */
 
 .primary:active {
-  transform: translateZ(20px) translateY(3px);
+
+  transform:
+    translateZ(20px)
+    translateY(3px);
+
 }
+
+
+/* DISABLED */
 
 .primary:disabled {
-  opacity: .7;
-  cursor: wait;
+
+  opacity:
+    0.7;
+
+  cursor:
+    wait;
+
 }
+
+
+/* =========================================
+   SPINNER
+   ========================================= */
 
 .spinner {
+
   display: inline-block;
+
   width: 20px;
+
   height: 20px;
-  border: 3px solid rgba(255,255,255,.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
+
+  border:
+    3px solid
+    rgba(0, 0, 0, 0.25);
+
+  border-top-color:
+    #020603;
+
+  border-radius:
+    50%;
+
+  animation:
+    spin 0.7s linear infinite;
+
 }
+
+
+/* SPINNER */
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+
+  to {
+
+    transform:
+      rotate(360deg);
+
+  }
+
 }
 
+
+/* =========================================
+   DIVIDER
+   ========================================= */
+
 .divider {
+
   display: flex;
+
   align-items: center;
+
   gap: 12px;
-  margin: 27px 0;
-  color: #475569;
-  font-size: 10px;
+
+  margin:
+    27px 0;
+
+  color:
+    #506158;
+
+  font-size:
+    10px;
+
 }
+
+
+/* DIVIDER LINES */
 
 .divider::before,
 .divider::after {
+
   content: "";
+
   height: 1px;
+
   flex: 1;
-  background: rgba(255,255,255,.12);
+
+  background:
+
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(0, 255, 85, 0.25),
+      transparent
+    );
+
 }
+
+
+/* =========================================
+   SOCIAL BUTTONS
+   ========================================= */
 
 .socials {
+
   display: grid;
-  grid-template-columns: 1fr 1fr;
+
+  grid-template-columns:
+    1fr 1fr;
+
   gap: 12px;
-  transform: translateZ(25px);
+
+  transform:
+    translateZ(25px);
+
 }
+
+
+/* SOCIAL BUTTON */
 
 .socials button {
+
   height: 50px;
-  border: 1px solid var(--border);
-  border-radius: 13px;
-  color: white;
-  background: rgba(255,255,255,.04);
-  cursor: pointer;
-  transition: .2s;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:
+    13px;
+
+  color:
+    white;
+
+  background:
+    rgba(255, 255, 255, 0.035);
+
+  cursor:
+    pointer;
+
+  transition:
+    0.2s;
+
 }
+
+
+/* SOCIAL HOVER */
 
 .socials button:hover {
-  transform: translateY(-3px);
-  background: rgba(255,255,255,.09);
+
+  transform:
+    translateY(-3px);
+
+  background:
+    rgba(0, 255, 85, 0.08);
+
+  border-color:
+    rgba(0, 255, 85, 0.35);
+
+  box-shadow:
+    0 0 18px
+    rgba(0, 255, 85, 0.08);
+
 }
+
+
+/* =========================================
+   SWITCH
+   ========================================= */
 
 .switch {
-  margin-top: 24px;
-  text-align: center;
-  color: var(--muted);
-  font-size: 12px;
+
+  margin-top:
+    24px;
+
+  text-align:
+    center;
+
+  color:
+    var(--muted);
+
+  font-size:
+    12px;
+
 }
+
+
+/* SWITCH BUTTON */
 
 .switch button {
-  border: 0;
-  background: none;
-  cursor: pointer;
-  font-weight: 800;
+
+  border:
+    0;
+
+  background:
+    none;
+
+  cursor:
+    pointer;
+
+  font-weight:
+    800;
+
 }
+
+
+/* =========================================
+   MESSAGE
+   ========================================= */
 
 .message {
-  display: none;
-  padding: 11px 13px;
-  margin-bottom: 16px;
-  border-radius: 12px;
-  font-size: 12px;
-  text-align: center;
+
+  display:
+    none;
+
+  padding:
+    11px 13px;
+
+  margin-bottom:
+    16px;
+
+  border-radius:
+    12px;
+
+  font-size:
+    12px;
+
+  text-align:
+    center;
+
 }
+
+
+/* SHOW MESSAGE */
 
 .message.show {
-  display: block;
+
+  display:
+    block;
+
 }
+
+
+/* ERROR */
 
 .message.error {
-  color: #fecaca;
-  background: rgba(239,68,68,.1);
-  border: 1px solid rgba(239,68,68,.2);
+
+  color:
+    #ffbaba;
+
+  background:
+    rgba(255, 50, 50, 0.08);
+
+  border:
+    1px solid
+    rgba(255, 50, 50, 0.20);
+
 }
+
+
+/* SUCCESS */
 
 .message.success {
-  color: #bbf7d0;
-  background: rgba(34,197,94,.1);
-  border: 1px solid rgba(34,197,94,.2);
+
+  color:
+    #baffc9;
+
+  background:
+    rgba(0, 255, 85, 0.07);
+
+  border:
+    1px solid
+    rgba(0, 255, 85, 0.20);
+
 }
+
+
+/* =========================================
+   PASSWORD STRENGTH
+   ========================================= */
 
 .strength {
-  margin-top: -10px;
-  margin-bottom: 18px;
+
+  margin-top:
+    -10px;
+
+  margin-bottom:
+    18px;
+
 }
+
+
+/* STRENGTH TRACK */
 
 .strength-track {
-  height: 4px;
-  overflow: hidden;
-  border-radius: 99px;
-  background: rgba(255,255,255,.08);
+
+  height:
+    4px;
+
+  overflow:
+    hidden;
+
+  border-radius:
+    99px;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
 }
+
+
+/* STRENGTH FILL */
 
 #strengthFill {
-  width: 0;
-  height: 100%;
-  transition: .25s;
-  background: #22d3ee;
+
+  width:
+    0;
+
+  height:
+    100%;
+
+  transition:
+    0.25s;
+
+  background:
+    linear-gradient(
+      90deg,
+      #ff3b30,
+      #ffe600,
+      #00ff55
+    );
+
 }
+
+
+/* STRENGTH TEXT */
 
 .strength small {
-  display: block;
-  margin-top: 5px;
-  color: var(--muted);
-  font-size: 10px;
+
+  display:
+    block;
+
+  margin-top:
+    5px;
+
+  color:
+    var(--muted);
+
+  font-size:
+    10px;
+
 }
 
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
 @media (max-width: 500px) {
-  .card {
-    padding: 30px 22px;
+
+  body {
+
+    overflow-y:
+      auto;
+
   }
 
-  .socials {
-    grid-template-columns: 1fr;
+
+  .card {
+
+    padding:
+      30px 22px;
+
   }
+
+
+  .socials {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+
+  .logo {
+
+    width:
+      82px;
+
+    height:
+      82px;
+
+  }
+
+
+  .heading h1 {
+
+    font-size:
+      26px;
+
+  }
+
+
+  .energy-ring-one {
+
+    width:
+      450px;
+
+    height:
+      450px;
+
+  }
+
+
+  .energy-ring-two {
+
+    width:
+      600px;
+
+    height:
+      600px;
+
+  }
+
 }

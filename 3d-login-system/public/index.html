@@ -3,78 +3,310 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Auth System</title>
+
+  <meta
+    name="description"
+    content="AimXContrra - Secure 3D Authentication System"
+  >
+
+  <meta name="theme-color" content="#020603">
+
+  <title>AimXContrra | Secure Access</title>
+
   <link rel="stylesheet" href="/style.css">
 </head>
+
 <body>
+
+  <!-- =========================================
+       3D BACKGROUND SCENE
+       ========================================= -->
+
   <div class="scene">
+
+    <!-- Neon glowing orbs -->
     <div class="orb orb-one"></div>
     <div class="orb orb-two"></div>
+    <div class="orb orb-three"></div>
+
+    <!-- 3D perspective grid -->
     <div class="grid"></div>
+
+    <!-- Animated particles -->
     <div class="particles" id="particles"></div>
+
+    <!-- Neon lightning atmosphere -->
+    <div class="energy-ring energy-ring-one"></div>
+    <div class="energy-ring energy-ring-two"></div>
+
   </div>
 
+
+  <!-- =========================================
+       AUTHENTICATION CONTAINER
+       ========================================= -->
+
   <main class="auth-shell">
+
     <div class="card-wrap" id="cardWrap">
+
       <section class="card">
-        <div class="logo">⚡</div>
+
+        <!-- =====================================
+             AIMXCONTRRA LOGO
+             ===================================== -->
+
+        <div class="logo">
+
+          <img
+            src="/assets/aimx-logo.png"
+            alt="AimXContrra Logo"
+          >
+
+        </div>
+
+
+        <!-- =====================================
+             HEADING
+             ===================================== -->
 
         <div class="heading">
-          <div class="eyebrow">SECURE ACCESS</div>
-          <h1 id="title">Welcome Back</h1>
-          <p id="subtitle">Sign in to continue to your account.</p>
+
+          <div class="eyebrow">
+            AIMXCONTRRA • SECURE ACCESS
+          </div>
+
+          <h1 id="title">
+            Welcome Back
+          </h1>
+
+          <p id="subtitle">
+            Sign in to continue to your account.
+          </p>
+
         </div>
 
-        <div id="message" class="message" role="alert"></div>
+
+        <!-- =====================================
+             MESSAGE
+             ===================================== -->
+
+        <div
+          id="message"
+          class="message"
+          role="alert"
+        ></div>
+
+
+        <!-- =====================================
+             AUTH FORM
+             ===================================== -->
 
         <form id="authForm">
-          <div class="field" id="nameField" hidden>
-            <input id="name" type="text" autocomplete="name" placeholder=" ">
-            <label for="name">Full name</label>
+
+          <!-- NAME -->
+          <div
+            class="field"
+            id="nameField"
+            hidden
+          >
+
+            <input
+              id="name"
+              type="text"
+              autocomplete="name"
+              placeholder=" "
+            >
+
+            <label for="name">
+              Full name
+            </label>
+
           </div>
 
+
+          <!-- EMAIL -->
           <div class="field">
-            <input id="email" type="email" autocomplete="email" placeholder=" " required>
-            <label for="email">Email address</label>
+
+            <input
+              id="email"
+              type="email"
+              autocomplete="email"
+              placeholder=" "
+              required
+            >
+
+            <label for="email">
+              Email address
+            </label>
+
           </div>
 
+
+          <!-- PASSWORD -->
           <div class="field">
-            <input id="password" type="password" autocomplete="current-password" placeholder=" " required>
-            <label for="password">Password</label>
-            <button class="eye" type="button" id="togglePassword" aria-label="Show password">👁</button>
+
+            <input
+              id="password"
+              type="password"
+              autocomplete="current-password"
+              placeholder=" "
+              required
+            >
+
+            <label for="password">
+              Password
+            </label>
+
+            <button
+              class="eye"
+              type="button"
+              id="togglePassword"
+              aria-label="Show password"
+            >
+              👁
+            </button>
+
           </div>
 
-          <div class="strength" id="strength" hidden>
-            <div class="strength-track"><div id="strengthFill"></div></div>
+
+          <!-- PASSWORD STRENGTH -->
+          <div
+            class="strength"
+            id="strength"
+            hidden
+          >
+
+            <div class="strength-track">
+
+              <div
+                id="strengthFill"
+              ></div>
+
+            </div>
+
             <small id="strengthText"></small>
+
           </div>
 
-          <div class="options" id="loginOptions">
-            <label><input type="checkbox" id="remember"> Remember me</label>
-            <a href="#" onclick="return false">Forgot password?</a>
+
+          <!-- LOGIN OPTIONS -->
+          <div
+            class="options"
+            id="loginOptions"
+          >
+
+            <label>
+
+              <input
+                type="checkbox"
+                id="remember"
+              >
+
+              Remember me
+
+            </label>
+
+
+            <a
+              href="#"
+              onclick="return false"
+            >
+              Forgot password?
+            </a>
+
           </div>
 
-          <button class="primary" id="submitButton" type="submit">
-            <span id="buttonText">SIGN IN</span>
-            <span class="spinner" id="spinner" hidden></span>
+
+          <!-- SUBMIT BUTTON -->
+          <button
+            class="primary"
+            id="submitButton"
+            type="submit"
+          >
+
+            <span id="buttonText">
+              SIGN IN
+            </span>
+
+            <span
+              class="spinner"
+              id="spinner"
+              hidden
+            ></span>
+
           </button>
+
         </form>
 
-        <div class="divider"><span>OR</span></div>
 
-        <div class="socials">
-          <button type="button" onclick="demoSocial()">🌐 Google</button>
-          <button type="button" onclick="demoSocial()">◈ GitHub</button>
+        <!-- =====================================
+             DIVIDER
+             ===================================== -->
+
+        <div class="divider">
+
+          <span>
+            OR
+          </span>
+
         </div>
 
+
+        <!-- =====================================
+             SOCIAL BUTTONS
+             ===================================== -->
+
+        <div class="socials">
+
+          <button
+            type="button"
+            onclick="demoSocial()"
+          >
+            🌐 Google
+          </button>
+
+          <button
+            type="button"
+            onclick="demoSocial()"
+          >
+            ◈ GitHub
+          </button>
+
+        </div>
+
+
+        <!-- =====================================
+             SWITCH LOGIN / REGISTER
+             ===================================== -->
+
         <p class="switch">
-          <span id="switchText">Don't have an account?</span>
-          <button type="button" id="switchMode">Create account</button>
+
+          <span id="switchText">
+            Don't have an account?
+          </span>
+
+          <button
+            type="button"
+            id="switchMode"
+          >
+            Create account
+          </button>
+
         </p>
+
       </section>
+
     </div>
+
   </main>
 
+
+  <!-- =========================================
+       JAVASCRIPT
+       ========================================= -->
+
   <script src="/app.js"></script>
+
 </body>
 </html>
