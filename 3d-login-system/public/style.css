@@ -1457,3 +1457,65 @@ body {
   }
 
 }
+/* ===== Desktop Auth Card Scroll Fix ===== */
+@media (min-width: 769px) {
+  body {
+    min-height: 100vh;
+    height: auto;
+    overflow-y: auto;
+  }
+
+  .auth-container,
+  .auth-wrapper,
+  .card-container {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .auth-card,
+  .card,
+  .login-card {
+    max-height: none;
+    overflow: visible;
+  }
+
+  #cardWrap {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+}
+/* ===== FINAL DESKTOP SIGNUP VISIBILITY FIX ===== */
+
+@media (min-width: 769px) {
+
+  html,
+  body {
+    min-height: 100%;
+    height: auto;
+    overflow-y: auto !important;
+    overflow-x: hidden;
+  }
+
+  body {
+    display: flex;
+    align-items: flex-start !important;
+    justify-content: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .card {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  #cardWrap {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+}
