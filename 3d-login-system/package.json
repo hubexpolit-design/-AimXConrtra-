@@ -1,0 +1,17 @@
+{
+  "name": "3d-login-system",
+  "version": "1.0.0",
+  "private": true,
+  "description": "3D login system with Express, SQLite and bcrypt",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "better-sqlite3": "^12.4.1",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2"
+  }
+}

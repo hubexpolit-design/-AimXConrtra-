@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Auth System</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="scene">
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+    <div class="grid"></div>
+    <div class="particles" id="particles"></div>
+  </div>
+
+  <main class="auth-shell">
+    <div class="card-wrap" id="cardWrap">
+      <section class="card">
+        <div class="logo">⚡</div>
+
+        <div class="heading">
+          <div class="eyebrow">SECURE ACCESS</div>
+          <h1 id="title">Welcome Back</h1>
+          <p id="subtitle">Sign in to continue to your account.</p>
+        </div>
+
+        <div id="message" class="message" role="alert"></div>
+
+        <form id="authForm">
+          <div class="field" id="nameField" hidden>
+            <input id="name" type="text" autocomplete="name" placeholder=" ">
+            <label for="name">Full name</label>
+          </div>
+
+          <div class="field">
+            <input id="email" type="email" autocomplete="email" placeholder=" " required>
+            <label for="email">Email address</label>
+          </div>
+
+          <div class="field">
+            <input id="password" type="password" autocomplete="current-password" placeholder=" " required>
+            <label for="password">Password</label>
+            <button class="eye" type="button" id="togglePassword" aria-label="Show password">👁</button>
+          </div>
+
+          <div class="strength" id="strength" hidden>
+            <div class="strength-track"><div id="strengthFill"></div></div>
+            <small id="strengthText"></small>
+          </div>
+
+          <div class="options" id="loginOptions">
+            <label><input type="checkbox" id="remember"> Remember me</label>
+            <a href="#" onclick="return false">Forgot password?</a>
+          </div>
+
+          <button class="primary" id="submitButton" type="submit">
+            <span id="buttonText">SIGN IN</span>
+            <span class="spinner" id="spinner" hidden></span>
+          </button>
+        </form>
+
+        <div class="divider"><span>OR</span></div>
+
+        <div class="socials">
+          <button type="button" onclick="demoSocial()">🌐 Google</button>
+          <button type="button" onclick="demoSocial()">◈ GitHub</button>
+        </div>
+
+        <p class="switch">
+          <span id="switchText">Don't have an account?</span>
+          <button type="button" id="switchMode">Create account</button>
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

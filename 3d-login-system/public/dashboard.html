@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .dashboard {
+      width: min(760px, 100%);
+      padding: 20px;
+    }
+    .panel {
+      padding: 42px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 30px;
+      background: rgba(8,15,35,.72);
+      backdrop-filter: blur(24px);
+      box-shadow: 0 40px 90px rgba(0,0,0,.5);
+      text-align: center;
+    }
+    .panel h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      margin: 15px 0 10px;
+    }
+    .panel p {
+      color: #94a3b8;
+      margin-bottom: 28px;
+    }
+    .logout {
+      border: 0;
+      border-radius: 13px;
+      padding: 14px 24px;
+      color: white;
+      font-weight: 800;
+      background: linear-gradient(135deg,#7c3aed,#06b6d4);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+    <div class="grid"></div>
+  </div>
+
+  <main class="auth-shell">
+    <section class="dashboard">
+      <div class="panel">
+        <div class="logo">✓</div>
+        <h1>Welcome, <span id="userName">User</span></h1>
+        <p>You are authenticated and viewing a protected page.</p>
+        <button class="logout" id="logout">LOG OUT</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    async function loadUser() {
+      const response = await fetch("/api/me", { credentials: "same-origin" });
+
+      if (!response.ok) {
+        window.location.href = "/";
+        return;
+      }
+
+      const data = await response.json();
+      document.getElementById("userName").textContent = data.user.name;
+    }
+
+    document.getElementById("logout").addEventListener("click", async () => {
+      await fetch("/api/logout", {
+        method: "POST",
+        credentials: "same-origin"
+      });
+
+      window.location.href = "/";
+    });
+
+    loadUser();
+  </script>
+</body>
+</html>
